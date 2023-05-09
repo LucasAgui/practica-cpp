@@ -17,16 +17,32 @@ int cantidadNros(string numeros){
 	return contador;
 }
 bool ingresadoAnteriormente(int arrayEnteros[], int longitud, int nro){
-	cout << "\nLa longitud es " << longitud << endl;
 	for(int x = 0; x < longitud; x++){
-		if(nro == arrayEnteros[x])
+		int nroActual = arrayEnteros[x];
+		if(nro == nroActual)
 			return true;
 	}
 	return false;
 }
+bool esElUltimoIntento(int intentoActual, int cantidadIntentosMax){
+	if(cantidadIntentosMax - intentoActual == 0)
+		return true;
+	else
+		return false;
+}
+int *rellenarIndice(int indice[], string numeros, cantidadNumeros){
+	longitud = numeros.length();
+	for(int x = 0; x < cantidadNumeros; x++){
+		for(int i = 1; i < longitud; i++){
+			if(numeros[i] == ' ')
+				indice[i] == i;
+		}
+	}
+	return indice;
+}
 int main(){
 	int rangoMin, rangoMax, cantidadIntentosMax, nroAleatorio, cantidadNumeros, numeroActual, intentosRestantes, longitudArray = 0, adivinoIntento;
-	string cadenaIngresada;
+	string cadenaIngresada, numeros;
 	bool adivino = false, ingresadoConAnterioridad = false;
 	cout << "Este es un juego de donde intentaras adivinar un numero aleatorio dentro de un rango que definas y en una cantidad de intentos maximos que tambien definiras..." << endl;
 	//pido rango minimo, maximo y cantidad de intentos y los guardo
@@ -50,14 +66,20 @@ int nrosIngresados[cantidadIntentosMax];
 intentosRestantes = cantidadIntentosMax;
 
 	for(int i = 0; i < cantidadIntentosMax; i++){
+		int j = 0;
+		int ultimoIndice = 0;
 		ingresadoConAnterioridad = false;
 		//solicito al usuario que intente adivinar
-		cout << "\nIntente adivinar el número secreto: ";
-		cin >> cadenaIngresada;
+		cout << "\nIntente adivinar el número secreto:"<< endl;
+		cin.ignore();
+		getline(cin, cadenaIngresada);
+		cout << endl;
+		numeros = cadenaIngresada;
+		cout << numeros << endl;
 		cantidadNumeros = cantidadNros(cadenaIngresada);
 		if(cantidadNumeros == 1){ //si hay un solo numero en la cadena hago esto
-			numeroActual = stoi(cadenaIngresada);
-			if(!ingresadoAnteriormente(nrosIngresados, longitudArray, numeroActual)){
+			numeroActual = stoi(numeros);
+			if(!(ingresadoAnteriormente(nrosIngresados, longitudArray, numeroActual))){
 				nrosIngresados[i] = numeroActual;
 				longitudArray++;
 				if(numeroActual == nroAleatorio){ //evaluo si adivino
@@ -65,7 +87,7 @@ intentosRestantes = cantidadIntentosMax;
 					adivino = true;
 					break;
 				}else{ //si no adivino, le digo si era mas alto o mas bajo
-					if(!(i + 1 == cantidadIntentosMax)){
+					if(!(esElUltimoIntento(i, cantidadIntentosMax))){
 						if(numeroActual < nroAleatorio){
 							cout << "\nEl número es mas alto. ";
 						}else
@@ -78,33 +100,37 @@ intentosRestantes = cantidadIntentosMax;
 			}else
 				ingresadoConAnterioridad = true;
 		}else{ //sino hago esto
-			cout << cantidadNumeros << "\n" << cadenaIngresada << endl;
-			for(int x = 0; x < cantidadNumeros; x++){
-				if(cadenaIngresada[x] == ' '){
+		int indiceNumerosIngresados[cantidadNumeros] = rell
+			for(int x = 0; x <= cantidadNumeros; x++){
+				cout << "vuelta nro: " << x << endl;
+				if(numeros[x] == ' '){
 					string cadenaNroActual;
 					int nroActual;
 					int indice = x;
-					if(!ingresadoAnteriormente(nrosIngresados, longitudArray, nroActual)){
-							nrosIngresados[i + x] = nroActual;
-						for(int j = 0; j < indice; j++){
+					
+						/*for(j = ultimoIndice; j <= indice; j++){
 							cadenaNroActual += cadenaIngresada[j];
+							ultimoIndice = indice;
 						}
+						*/
 						nroActual = stoi(cadenaNroActual);
+						cout << "\nnro actual = " << nroActual << endl;
+					if(!(ingresadoAnteriormente(nrosIngresados, longitudArray, nroActual))){
+					nrosIngresados[i + x] = nroActual;
 						if(nroActual == nroAleatorio){
 							adivinoIntento = i + 1 + x;
 							adivino = true;
 							break;
 						}else{
-							if(!(i + x == cantidadIntentosMax)){
+							if(!(esElUltimoIntento(i, cantidadIntentosMax))){
 								if(nroActual < nroAleatorio)
-									cout << "\nEl número es mas alto que " << nroActual << endl;
+									cout << "\nEl número es mas alto que "<< nroActual << endl;
 								else
-									cout << "\nEl número es mas bajo que " << nroActual << endl;	
+									cout << "\nEl número es mas bajo que "<< nroActual << endl;	
 							}else{
 								cout << "\nEra tu ultimo intento." << endl;	
 								break;
-							}
-								
+							}	
 						}
 					}else
 						ingresadoConAnterioridad = true;
